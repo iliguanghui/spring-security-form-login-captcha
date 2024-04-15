@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringSecurityFormLoginApplication {
+public class SpringSecurityFormLoginCaptchaApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SpringSecurityFormLoginApplication.class, args);
+        SpringApplication.run(SpringSecurityFormLoginCaptchaApplication.class, args);
     }
 }

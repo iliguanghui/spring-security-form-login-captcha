@@ -1,8 +1,8 @@
 package com.lgypro.config;
 
+import com.lgypro.filter.VerificationCodeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -12,6 +12,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
@@ -43,13 +44,16 @@ public class SecurityConfig {
         return http
             .authorizeHttpRequests(authorizeHttpRequests ->
                 authorizeHttpRequests
+                    .requestMatchers("/favicon.ico").permitAll()
                     .requestMatchers("/login").permitAll()
+                    .requestMatchers("/app/api/captcha.jpg").permitAll()
                     .anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
                 .loginPage("/login")
                 .loginProcessingUrl("/login").permitAll()
                 .defaultSuccessUrl("/index"))
+            .addFilterBefore(new VerificationCodeFilter(), UsernamePasswordAuthenticationFilter.class)
             .csrf(AbstractHttpConfigurer::disable)
             .logout(logout -> logout
                 .deleteCookies("JSESSIONID")
